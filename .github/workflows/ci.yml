@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - 'main'
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - 'main'
+
+jobs:
+  lint-tests:
+    name: Lint & Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          cache-dependency-path: 'go.sum'
+          go-version-file: 'go.mod'
+      - run: go version
+      - name: Run linters
+        run: make lint
+      - name: Run tests
+        run: make test
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          cache-dependency-path: 'go.sum'
+          go-version-file: 'go.mod'
+      - run: go version
+      - name: Run build
+        run: make build
+
