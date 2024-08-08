@@ -7,7 +7,7 @@ A BIP-0044 compatible key generator for multiple blockchains. This is not a secu
 ## Usage
 ### key-gen
 ```
-key-gen is a CLI tool to generate keys for various blockchains. It supports Bitcoin, Ethereum, and other blockchains.It supports saving keys to 1Password, and the file system in encrypted or unencrypted json. The keys are generated from a BIP32 seed and support BIP44, BIP49, and BIP84 derivation paths. This project has not and will not be audited by a security professional. Use at your own risk.
+key-gen is a CLI tool to generate keys for various blockchains. It supports Bitcoin, Ethereum, and other blockchains. It supports saving keys to 1Password, and the file system in encrypted or unencrypted json. The keys are generated from a BIP32 seed and support BIP44, BIP49, and BIP84 derivation paths. This project has not and will not be audited by a security professional. Use at your own risk.
 
 Usage:
   key-gen [command]

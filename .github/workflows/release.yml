@@ -33,3 +33,13 @@ jobs:
           project_path: "."
           binary_name: "key-gen"
           extra_files: LICENSE README.md
+
+      - name: Bump homebrew-core formula
+        uses: mislav/bump-homebrew-formula-action@v3
+        if: "matrix.goos == 'darwin' && !contains(github.ref, '-')" # skip prereleases
+        env:
+          COMMITTER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          formula-name: key-gen
+          # https://github.com/mislav/bump-homebrew-formula-action/issues/58
+          formula-path: Formula/k/key-gen.rb
