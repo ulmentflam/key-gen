@@ -1,7 +1,27 @@
 # key-gen
 A BIP-0044 compatible key generator for multiple blockchains. This is not a secure method, but is useful for quick key generation.
 
+## Installation
+
+
+## Usage
+
+```bash
+key-gen generate
+``` 
+
+```bash
+key-gen encrypt --password <password>
+``` 
+
+```bash
+key-gen decrypt --password <password> --file <encrypted-file>
+``` 
+
 ## 1Password Setup (Optional)
+
+### Warning
+This is an optional step. If you do not want to use 1Password, you can skip this step. The 1Password SDK is still in deep beta and could change at any time! Use at your own risk.
 
 ### Step 1: Create a service account
 Create a [1Password Service Account](https://developer.1password.com/docs/service-accounts/get-started/) and give it access to the vaults where the secrets you want to use with the SDK are saved.

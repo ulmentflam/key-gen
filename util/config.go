@@ -122,6 +122,10 @@ func NewKeyConfig(flagSet *pflag.FlagSet, encrypt bool) (*KeyConfig, error) {
 	}
 
 	if opConfig.ServiceAccountToken != "" && opConfig.VaultID == "" {
+		return nil, fmt.Errorf("a vault id is required when using a service account token")
+	}
+
+	if opConfig.ServiceAccountToken == "" || opConfig.VaultID == "" {
 		opConfig = nil
 	}
 
