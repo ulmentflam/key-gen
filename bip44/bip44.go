@@ -301,7 +301,7 @@ func (km *KeyManager) ToJSON(accounts int, compress bool) (string, error) {
 		if err != nil {
 			return "", err
 		}
-		legacy, err := legacyKey.DecodeWIF(compress)
+		legacy, err := legacyKey.NewWIF(compress)
 		if err != nil {
 			return "", err
 		}
@@ -315,7 +315,7 @@ func (km *KeyManager) ToJSON(accounts int, compress bool) (string, error) {
 		if err != nil {
 			return "", err
 		}
-		swn, err := swnKey.DecodeWIF(compress)
+		swn, err := swnKey.NewWIF(compress)
 		if err != nil {
 			return "", err
 		}
@@ -329,7 +329,7 @@ func (km *KeyManager) ToJSON(accounts int, compress bool) (string, error) {
 		if err != nil {
 			return "", err
 		}
-		swn32, err := swn32Key.DecodeWIF(compress)
+		swn32, err := swn32Key.NewWIF(compress)
 		if err != nil {
 			return "", err
 		}
@@ -343,7 +343,7 @@ func (km *KeyManager) ToJSON(accounts int, compress bool) (string, error) {
 		if err != nil {
 			return "", err
 		}
-		tpr, err := tprKey.DecodeWIF(compress)
+		tpr, err := tprKey.NewWIF(compress)
 		if err != nil {
 			return "", err
 		}
@@ -404,12 +404,12 @@ func (km *KeyManager) ToPrettyString(accounts int, compress bool) (sp string, er
 		if err != nil {
 			return "", err
 		}
-		dwif, err := key.DecodeWIF(compress)
+		wif, err := key.NewWIF(compress)
 		if err != nil {
 			return "", err
 		}
 
-		sp += fmt.Sprintf("%-18s %-34s %s\n", key.Path, dwif.Address, dwif.WIFString)
+		sp += fmt.Sprintf("%-18s %-34s %s\n", key.Path, wif.Address, wif.WIFString)
 	}
 
 	sp += fmt.Sprintf("\n%-18s %-34s %s\n", "Path(BIP49)", "SegWit(P2WPKH-nested-in-P2SH)", "WIF(Wallet Import Format)")
@@ -420,12 +420,12 @@ func (km *KeyManager) ToPrettyString(accounts int, compress bool) (sp string, er
 		if err != nil {
 			return "", err
 		}
-		dwif, err := key.DecodeWIF(compress)
+		wif, err := key.NewWIF(compress)
 		if err != nil {
 			return "", err
 		}
 
-		sp += fmt.Sprintf("%-18s %s %s\n", key.Path, dwif.SegwitNested, dwif.WIFString)
+		sp += fmt.Sprintf("%-18s %s %s\n", key.Path, wif.SegwitNested, wif.WIFString)
 	}
 
 	sp += fmt.Sprintf("\n%-18s %-42s %s\n", "Path(BIP84)", "SegWit(P2WPKH, bech32)", "WIF(Wallet Import Format)")
@@ -436,7 +436,7 @@ func (km *KeyManager) ToPrettyString(accounts int, compress bool) (sp string, er
 		if err != nil {
 			return "", err
 		}
-		dwif, err := key.DecodeWIF(compress)
+		dwif, err := key.NewWIF(compress)
 		if err != nil {
 			return "", err
 		}
@@ -453,12 +453,12 @@ func (km *KeyManager) ToPrettyString(accounts int, compress bool) (sp string, er
 		if err != nil {
 			return "", err
 		}
-		dwif, err := key.DecodeWIF(compress)
+		wif, err := key.NewWIF(compress)
 		if err != nil {
 			return "", err
 		}
 
-		sp += fmt.Sprintf("%-18s %s %s\n", key.Path, dwif.Taproot, dwif.WIFString)
+		sp += fmt.Sprintf("%-18s %s %s\n", key.Path, wif.Taproot, wif.WIFString)
 	}
 
 	sp += fmt.Sprintf("\n%-18s %-42s %-52s\n", "Path(BIP44)", "Ethereum(EIP55)", "Private BIP32Key(hex)")

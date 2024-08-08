@@ -8,7 +8,7 @@ import (
 	"github.com/btcsuite/btcd/txscript"
 )
 
-type DecodedWIF struct {
+type WIF struct {
 	BTCWIF       *btcutil.WIF
 	WIFString    string
 	Address      string
@@ -18,12 +18,12 @@ type DecodedWIF struct {
 }
 
 // FromPrivateKey generates a wif, EVMAddress, SegwitBech32, SegwitNested, and Taproot EVMAddress from a private key
-func FromPrivateKey(prvKey *btcec.PrivateKey, compress bool) (dwif *DecodedWIF, err error) {
-	dwif = nil
+func FromPrivateKey(prvKey *btcec.PrivateKey, compress bool) (wif *WIF, err error) {
+	wif = nil
 	// generate the wif(wallet import format) string
 	btcwif, err := btcutil.NewWIF(prvKey, &chaincfg.MainNetParams, compress)
 	if err != nil {
-		return dwif, err
+		return wif, err
 	}
 	wifString := btcwif.String()
 
@@ -31,7 +31,7 @@ func FromPrivateKey(prvKey *btcec.PrivateKey, compress bool) (dwif *DecodedWIF, 
 	serializedPubKey := btcwif.SerializePubKey()
 	addressPubKey, err := btcutil.NewAddressPubKey(serializedPubKey, &chaincfg.MainNetParams)
 	if err != nil {
-		return dwif, err
+		return wif, err
 	}
 	address := addressPubKey.EncodeAddress()
 
@@ -39,7 +39,7 @@ func FromPrivateKey(prvKey *btcec.PrivateKey, compress bool) (dwif *DecodedWIF, 
 	witnessProg := btcutil.Hash160(serializedPubKey)
 	addressWitnessPubKeyHash, err := btcutil.NewAddressWitnessPubKeyHash(witnessProg, &chaincfg.MainNetParams)
 	if err != nil {
-		return dwif, err
+		return wif, err
 	}
 	segwitBech32 := addressWitnessPubKeyHash.EncodeAddress()
 
@@ -49,11 +49,11 @@ func FromPrivateKey(prvKey *btcec.PrivateKey, compress bool) (dwif *DecodedWIF, 
 	// and malleability fixes.
 	serializedScript, err := txscript.PayToAddrScript(addressWitnessPubKeyHash)
 	if err != nil {
-		return dwif, err
+		return wif, err
 	}
 	addressScriptHash, err := btcutil.NewAddressScriptHash(serializedScript, &chaincfg.MainNetParams)
 	if err != nil {
-		return dwif, err
+		return wif, err
 	}
 	segwitNested := addressScriptHash.EncodeAddress()
 
@@ -61,11 +61,11 @@ func FromPrivateKey(prvKey *btcec.PrivateKey, compress bool) (dwif *DecodedWIF, 
 	tapKey := txscript.ComputeTaprootKeyNoScript(prvKey.PubKey())
 	addressTaproot, err := btcutil.NewAddressTaproot(schnorr.SerializePubKey(tapKey), &chaincfg.MainNetParams)
 	if err != nil {
-		return dwif, err
+		return wif, err
 	}
 	taproot := addressTaproot.EncodeAddress()
 
-	dwif = &DecodedWIF{
+	wif = &WIF{
 		BTCWIF:       btcwif,
 		Address:      address,
 		WIFString:    wifString,
@@ -74,5 +74,5 @@ func FromPrivateKey(prvKey *btcec.PrivateKey, compress bool) (dwif *DecodedWIF, 
 		Taproot:      taproot,
 	}
 
-	return dwif, err
+	return wif, err
 }

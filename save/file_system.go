@@ -21,19 +21,21 @@ import (
 )
 
 const HiddenFile = ".key-gen"
-const PW_SALT_BYTES = 32
+const PwSaltBytes = 32
+const EncryptionIterations = 4096
+const KeyBits = 32
 
 type FSSaver struct {
 	filePath string
 }
 
-func NewFileSystemSaver(config util.Config) (*FSSaver, error) {
-	if config.FilePath != "" {
-		err := upsertPath(config.FilePath)
+func NewFileSystemSaver(config util.KeyConfig) (*FSSaver, error) {
+	if config.GlobalConfig.FilePath != "" {
+		err := upsertPath(config.GlobalConfig.FilePath)
 		if err != nil {
 			return nil, err
 		}
-		return &FSSaver{config.FilePath}, nil
+		return &FSSaver{config.GlobalConfig.FilePath}, nil
 	}
 	filePath, err := keyGenPath()
 	if err != nil {
@@ -47,8 +49,8 @@ func NewFileSystemSaver(config util.Config) (*FSSaver, error) {
 }
 
 func Decrypt(filePath string, password string) ([]byte, error) {
-	salt := make([]byte, PW_SALT_BYTES)
-	key := pbkdf2.Key([]byte(password), salt, 4096, 32, sha256.New)
+	salt := make([]byte, PwSaltBytes)
+	key := pbkdf2.Key([]byte(password), salt, EncryptionIterations, KeyBits, sha256.New)
 	// Reading ciphertext file
 	cipherText, err := os.ReadFile(filePath)
 	if err != nil {
@@ -77,7 +79,7 @@ func Decrypt(filePath string, password string) ([]byte, error) {
 	return plainText, nil
 }
 
-func (s *FSSaver) Save(ctx context.Context, config util.Config, manager *bip44.KeyManager) error {
+func (s *FSSaver) Save(ctx context.Context, config util.KeyConfig, manager *bip44.KeyManager) error {
 	currentTime := time.Now()
 	fileExt := ".json"
 	if config.Encrypt {
@@ -97,9 +99,9 @@ func (s *FSSaver) Save(ctx context.Context, config util.Config, manager *bip44.K
 
 	if config.Encrypt {
 		fmt.Printf("\n%-18s %s\n\n", "Encrypted:", "AES-256-GCM")
-
-		salt := make([]byte, PW_SALT_BYTES)
-		dk := pbkdf2.Key([]byte(config.Password), salt, 4096, 32, sha256.New)
+		password := config.GlobalConfig.Password
+		salt := make([]byte, PwSaltBytes)
+		dk := pbkdf2.Key([]byte(password), salt, EncryptionIterations, KeyBits, sha256.New)
 
 		// Creating block of algorithm
 		block, err := aes.NewCipher(dk)

@@ -31,8 +31,8 @@ func NewKey(path string, key *bip32.Key) *Key {
 	}
 }
 
-// DecodeWIF decodes the key into a WIF
-func (k *Key) DecodeWIF(compress bool) (*btc.DecodedWIF, error) {
+// NewWIF Transforms the key into a WIF
+func (k *Key) NewWIF(compress bool) (*btc.WIF, error) {
 	prvKey, _ := btcec.PrivKeyFromBytes(k.BIP32Key.Key)
 	return btc.FromPrivateKey(prvKey, compress)
 }

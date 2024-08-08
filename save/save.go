@@ -8,18 +8,18 @@ import (
 )
 
 type Saver interface {
-	Save(ctx context.Context, config util.Config, manager *bip44.KeyManager) error
+	Save(ctx context.Context, config util.KeyConfig, manager *bip44.KeyManager) error
 }
 
 type Save struct {
 	savers []Saver
-	config util.Config
+	config util.KeyConfig
 }
 
-func NewSave(config util.Config) (*Save, error) {
+func NewSave(config util.KeyConfig) (*Save, error) {
 
 	var savers []Saver
-	if config.OPServiceAccountToken != "" {
+	if config.OPConfig != nil {
 		op, err := NewOPSaver(config)
 		if err != nil {
 			return nil, err
@@ -39,9 +39,9 @@ func NewSave(config util.Config) (*Save, error) {
 	}, nil
 }
 
-func (s *Save) Save(ctx context.Context, config util.Config, manager *bip44.KeyManager) error {
+func (s *Save) Save(ctx context.Context, manager *bip44.KeyManager) error {
 	for _, saver := range s.savers {
-		err := saver.Save(ctx, config, manager)
+		err := saver.Save(ctx, s.config, manager)
 		if err != nil {
 			return err
 		}

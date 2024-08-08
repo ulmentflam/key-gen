@@ -48,6 +48,6 @@ test:
 
 #📦 build: @ Builds the key-gen binary
 build:
-	@go build -o key-gen cmd/key-gen/main.go
+	@go build -o key-gen .
 
 

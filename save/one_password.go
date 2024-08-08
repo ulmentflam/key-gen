@@ -17,13 +17,13 @@ type OPSaver struct {
 	vaultID string
 }
 
-func NewOPSaver(config util.Config) (s *OPSaver, err error) {
-	client, err := onepassword.NewClient(context.TODO(), onepassword.WithServiceAccountToken(config.OPServiceAccountToken), onepassword.WithIntegrationInfo("My 1Password Integration", "v1.0.0"))
+func NewOPSaver(config util.KeyConfig) (s *OPSaver, err error) {
+	client, err := onepassword.NewClient(context.TODO(), onepassword.WithServiceAccountToken(config.OPConfig.ServiceAccountToken), onepassword.WithIntegrationInfo("My 1Password Integration", "v1.0.0"))
 	if err != nil {
 		return nil, err
 	}
 
-	return &OPSaver{client: client, vaultID: config.OPVaultID}, err
+	return &OPSaver{client: client, vaultID: config.OPConfig.VaultID}, err
 }
 
 func sections() []onepassword.ItemSection {
@@ -65,7 +65,7 @@ func walletPrivateKeyItem(id string, title string, value string, sectionID strin
 	return itemField(fmt.Sprintf("walletPrivateKey%s", id), title, value, onepassword.ItemFieldTypeConcealed, sectionID)
 }
 
-func (s *OPSaver) Save(ctx context.Context, config util.Config, manager *bip44.KeyManager) error {
+func (s *OPSaver) Save(ctx context.Context, config util.KeyConfig, manager *bip44.KeyManager) error {
 	currentTime := time.Now()
 	itemName := fmt.Sprintf("%s (%s)", config.Name, currentTime.Format(time.ANSIC))
 	fmt.Printf("\n%-18s \n", "1Password")
@@ -109,7 +109,7 @@ func (s *OPSaver) Save(ctx context.Context, config util.Config, manager *bip44.K
 				if err != nil {
 					return err
 				}
-				legacy, err := legacyKey.DecodeWIF(config.Compressed)
+				legacy, err := legacyKey.NewWIF(config.Compressed)
 				if err != nil {
 					return err
 				}
@@ -117,7 +117,7 @@ func (s *OPSaver) Save(ctx context.Context, config util.Config, manager *bip44.K
 				if err != nil {
 					return err
 				}
-				swn, err := swnKey.DecodeWIF(config.Compressed)
+				swn, err := swnKey.NewWIF(config.Compressed)
 				if err != nil {
 					return err
 				}
@@ -125,7 +125,7 @@ func (s *OPSaver) Save(ctx context.Context, config util.Config, manager *bip44.K
 				if err != nil {
 					return err
 				}
-				swn32, err := swn32Key.DecodeWIF(config.Compressed)
+				swn32, err := swn32Key.NewWIF(config.Compressed)
 				if err != nil {
 					return err
 				}
@@ -133,7 +133,7 @@ func (s *OPSaver) Save(ctx context.Context, config util.Config, manager *bip44.K
 				if err != nil {
 					return err
 				}
-				tpr, err := tprKey.DecodeWIF(config.Compressed)
+				tpr, err := tprKey.NewWIF(config.Compressed)
 				if err != nil {
 					return err
 				}
@@ -142,6 +142,7 @@ func (s *OPSaver) Save(ctx context.Context, config util.Config, manager *bip44.K
 				fields = append(fields, walletAddressItem(fmt.Sprintf("BTCSegWit%d", i), fmt.Sprintf("Bitcoin SegWit(P2WPKH-nested-in-P2SH) #%d", i+1), swn.SegwitNested, section.ID))
 				fields = append(fields, walletAddressItem(fmt.Sprintf("BTCSegWit32%d", i), fmt.Sprintf("Bitcoin SegWit(P2WPKH, bech32) #%d", i+1), swn32.SegwitBech32, section.ID))
 				fields = append(fields, walletAddressItem(fmt.Sprintf("BTCTaproot%d", i), fmt.Sprintf("Bitcoin Taproot(P2TR, bech32m) #%d", i+1), tpr.Taproot, section.ID))
+				fields = append(fields, walletPathItem(fmt.Sprintf("BTCPath%d", i), fmt.Sprintf("Path #%d", i+1), legacyKey.Path, section.ID))
 				fields = append(fields, walletPrivateKeyItem(fmt.Sprintf("BTCWIF%d", i), fmt.Sprintf("Bitcoin WIF(Wallet Import Format) #%d", i+1), legacy.WIFString, section.ID))
 			}
 		}
