@@ -1,10 +1,8 @@
 name: CD
 
 on:
-  push:
-    tags:
-      - '*'
-  workflow_dispatch:
+  release:
+    types: [created]
 
 permissions:
   contents: write
