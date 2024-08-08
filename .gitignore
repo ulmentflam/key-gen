@@ -27,3 +27,6 @@ go.work.sum
 # IDE workspace file
 .idea/
 .vscode/
+
+# Build output
+key-gen
