@@ -296,6 +296,22 @@ func (km *KeyManager) ToJSON(accounts int, compress bool) (string, error) {
 	}
 	btcAccounts := make([]KeyAccountJSON, 0)
 	evmAccounts := make([]KeyAccountJSON, 0)
+	evmAccounts = append(evmAccounts, KeyAccountJSON{
+		Path:       mainKey.Path,
+		Address:    mainKey.EVMAddress.String(),
+		PrivateKey: fmt.Sprintf("%x", mainKey.Key),
+		KeyType:    "Ethereum(EIP55)",
+	})
+	mainWIF, err := mainKey.NewWIF(compress)
+	if err != nil {
+		return "", err
+	}
+	btcAccounts = append(btcAccounts, KeyAccountJSON{
+		Path:       mainKey.Path,
+		Address:    mainWIF.Address,
+		PrivateKey: mainWIF.WIFString,
+		KeyType:    "Legacy(P2PKH, compressed)",
+	})
 	for i := 0; i < accounts; i++ {
 		legacyKey, err := km.Key(PurposeBIP44, CoinTypeBitcoin, 0, 0, uint32(i))
 		if err != nil {
@@ -399,6 +415,12 @@ func (km *KeyManager) ToPrettyString(accounts int, compress bool) (sp string, er
 	sp += fmt.Sprintf("\n%-18s %-34s %-52s\n", "Path(BIP44)", "Legacy(P2PKH, compressed)", "WIF(Wallet Import Format)")
 	sp += strings.Repeat("-", 106)
 	sp += "\n"
+	wif, err := mainKey.NewWIF(compress)
+	if err != nil {
+		return "", err
+	}
+	sp += fmt.Sprintf("%-18s %-34s %s\n", mainKey.Path, wif.Address, wif.WIFString)
+
 	for i := 0; i < accounts; i++ {
 		key, err := km.Key(PurposeBIP44, CoinTypeBitcoin, 0, 0, uint32(i))
 		if err != nil {
@@ -464,6 +486,7 @@ func (km *KeyManager) ToPrettyString(accounts int, compress bool) (sp string, er
 	sp += fmt.Sprintf("\n%-18s %-42s %-52s\n", "Path(BIP44)", "Ethereum(EIP55)", "Private BIP32Key(hex)")
 	sp += strings.Repeat("-", 126)
 	sp += "\n"
+	sp += fmt.Sprintf("%-18s %s %x\n", mainKey.Path, mainKey.EVMAddress, mainKey.Key)
 	for i := 0; i < accounts; i++ {
 		key, err := km.Key(PurposeBIP44, CoinTypeEthereum, 0, 0, uint32(i))
 		if err != nil {

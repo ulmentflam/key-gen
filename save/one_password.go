@@ -12,6 +12,8 @@ import (
 	"key-gen/util"
 )
 
+const PwComplexity = 32
+
 type OPSaver struct {
 	client  *onepassword.Client
 	vaultID string
@@ -89,10 +91,18 @@ func (s *OPSaver) Save(ctx context.Context, config util.KeyConfig, manager *bip4
 			if manager.Passphrase != "" {
 				fields = append(fields, itemField("password", "mnemonic password", manager.Passphrase, onepassword.ItemFieldTypeConcealed, section.ID))
 			}
+			if config.GlobalConfig.Password != "" {
+				fields = append(fields, itemField("password", "password", config.GlobalConfig.Password, onepassword.ItemFieldTypeConcealed, section.ID))
+			} else {
+				fields = append(fields, itemField("password", "password", util.RandString(PwComplexity), onepassword.ItemFieldTypeConcealed, section.ID))
+			}
 			fields = append(fields, itemField("seed", "seed", fmt.Sprintf("%x", manager.Seed()), onepassword.ItemFieldTypeConcealed, section.ID))
 			fields = append(fields, itemField("root key", "root key", mk.Base58Key(), onepassword.ItemFieldTypeConcealed, section.ID))
 		}
 		if section.ID == "evmAccounts" {
+			fields = append(fields, walletAddressItem(fmt.Sprintf("EVMAddress%s", "Master"), fmt.Sprintf("Address #%s", "Master"), mk.EVMAddress.Hex(), section.ID))
+			fields = append(fields, walletPathItem(fmt.Sprintf("EVMPath%s", "Master"), fmt.Sprintf("Path #%s", "Master"), mk.Path, section.ID))
+			fields = append(fields, walletPrivateKeyItem(fmt.Sprintf("EVMPrivateKey%s", "Master"), fmt.Sprintf("Private Key #%s", "Master"), mk.HexKey(), section.ID))
 			for i := 0; i < config.Accounts; i++ {
 				key, err := manager.Key(bip44.PurposeBIP44, bip44.CoinTypeEthereum, 0, 0, uint32(i))
 				if err != nil {
