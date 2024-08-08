@@ -22,7 +22,7 @@ import (
 var generateCmd = &cobra.Command{
 	Use:   "generate",
 	Short: "Generate unencrypted accounts with private keys to 1Password and/or the file system",
-	Long: `This command generates accounts and keys for various blockchains. 
+	Long: `Generate unencrypted accounts and keys for various blockchains. 
 It supports Bitcoin, Ethereum, and other blockchains that support BIP-0032 and BIP-0044 keys. 
 It accepts or generates the base mnemonic and can encrypt the mnemonic with a password.`,
 	Run: func(cmd *cobra.Command, args []string) {

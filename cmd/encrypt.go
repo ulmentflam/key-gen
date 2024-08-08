@@ -21,7 +21,7 @@ import (
 var encryptCmd = &cobra.Command{
 	Use:   "encrypt",
 	Short: "Generate encrypted accounts with private keys to the file system",
-	Long: `This command generates AES-256 encrypted accounts and keys to the file system at ~/.key-gen or a specified directory. 
+	Long: `Generates AES-256 encrypted accounts and keys to the file system at ~/.key-gen or a specified directory. 
 It supports Bitcoin, Ethereum, and other blockchains that support BIP-0032 and BIP-0044 keys. 
 It accepts or generates the base mnemonic and can encrypt the mnemonic with a password.`,
 	Run: func(cmd *cobra.Command, args []string) {
