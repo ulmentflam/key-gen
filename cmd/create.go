@@ -88,20 +88,13 @@ It accepts or generates the base mnemonic and can encrypt the mnemonic with a pa
 func init() {
 	rootCmd.AddCommand(createCmd)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// createCmd.PersistentFlags().String("foo", "", "A help for foo")
 	createCmd.PersistentFlags().StringP("mnemonic", "m", "", "Base mnemonic for the wallet (optional)")
 	createCmd.PersistentFlags().IntP("accounts", "a", util.DefaultAccounts, "Number of accounts to generate")
 	createCmd.PersistentFlags().StringP("name", "n", util.DefaultName, "Name of the wallet")
 	createCmd.PersistentFlags().BoolP("encrypt-mnemonic", "e", false, "Encrypt the mnemonic with a password")
 	createCmd.PersistentFlags().BoolP("compressed", "c", true, "Compress the output keys")
 	createCmd.PersistentFlags().BoolP("save", "", true, "Save the wallet to a file or to 1Password")
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// createCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+
 	viper.SetEnvPrefix("op")
 	createCmd.Flags().StringP("op-service-account-token", "t", "", "1Password service account token (optional)")
 	createCmd.Flags().StringP("op-vault-id", "v", "", "1Password vault ID (optional)")

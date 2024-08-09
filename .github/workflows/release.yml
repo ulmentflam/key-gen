@@ -34,12 +34,23 @@ jobs:
           binary_name: "key-gen"
           extra_files: LICENSE README.md
 
-      - name: Bump homebrew-core formula
-        uses: mislav/bump-homebrew-formula-action@v3
-        if: "matrix.goos == 'darwin' && !contains(github.ref, '-')" # skip prereleases
-        env:
-          COMMITTER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract version
+        id: extract-version
+        # Strip a string prefix from the git tag name:
+        run: |
+          echo "tag-name=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - uses: mislav/bump-homebrew-formula-action@v3
         with:
           formula-name: key-gen
-          # https://github.com/mislav/bump-homebrew-formula-action/issues/58
           formula-path: Formula/k/key-gen.rb
+          homebrew-tap: ulmentflam/tap
+          base-branch: main
+          download-url: https://example.com/packages/key-gen-${{ steps.extract-version.outputs.tag-name }}-darwin-arm64.tar.gz
+          commit-message: |
+            {{formulaName}} {{version}}
+
+            Created by https://github.com/mislav/bump-homebrew-formula-action
+        env:
+          COMMITTER_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
+          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,3 +1,9 @@
+// Package bip44
+/*
+Copyright © 2024 Evan Owen <admin@ulmentflam.com>
+
+Thanks to modood and tyler-smith for the reference implementation.
+*/
 package bip44
 
 import (
