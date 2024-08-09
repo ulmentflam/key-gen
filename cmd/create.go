@@ -18,17 +18,17 @@ import (
 	"key-gen/util"
 )
 
-// generateCmd represents the generate command
-var generateCmd = &cobra.Command{
-	Use:   "generate",
-	Short: "Generate unencrypted accounts with private keys to 1Password and/or the file system",
-	Long: `Generate unencrypted accounts and keys for various blockchains. 
+// createCmd represents the generate command
+var createCmd = &cobra.Command{
+	Use:   "create",
+	Short: "Create unencrypted accounts with private keys to 1Password and/or the file system",
+	Long: `Create unencrypted accounts and keys for various blockchains. 
 It supports Bitcoin, Ethereum, and other blockchains that support BIP-0032 and BIP-0044 keys. 
 It accepts or generates the base mnemonic and can encrypt the mnemonic with a password.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		config, err := util.NewGenerateConfig(cmd.Flags())
 		if err != nil {
-			_, _ = fmt.Fprintf(os.Stderr, "Failed creating generate config with error: %v\n", err)
+			_, _ = fmt.Fprintf(os.Stderr, "Failed parsing create flags with error: %v\n", err)
 			return
 		}
 
@@ -86,31 +86,31 @@ It accepts or generates the base mnemonic and can encrypt the mnemonic with a pa
 }
 
 func init() {
-	rootCmd.AddCommand(generateCmd)
+	rootCmd.AddCommand(createCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// generateCmd.PersistentFlags().String("foo", "", "A help for foo")
-	generateCmd.PersistentFlags().StringP("mnemonic", "m", "", "Base mnemonic for the wallet (optional)")
-	generateCmd.PersistentFlags().IntP("accounts", "a", util.DefaultAccounts, "Number of accounts to generate")
-	generateCmd.PersistentFlags().StringP("name", "n", util.DefaultName, "Name of the wallet")
-	generateCmd.PersistentFlags().BoolP("encrypt-mnemonic", "e", false, "Encrypt the mnemonic with a password")
-	generateCmd.PersistentFlags().BoolP("compressed", "c", true, "Compress the output keys")
-	generateCmd.PersistentFlags().BoolP("save", "", true, "Save the wallet to a file or to 1Password")
+	// createCmd.PersistentFlags().String("foo", "", "A help for foo")
+	createCmd.PersistentFlags().StringP("mnemonic", "m", "", "Base mnemonic for the wallet (optional)")
+	createCmd.PersistentFlags().IntP("accounts", "a", util.DefaultAccounts, "Number of accounts to generate")
+	createCmd.PersistentFlags().StringP("name", "n", util.DefaultName, "Name of the wallet")
+	createCmd.PersistentFlags().BoolP("encrypt-mnemonic", "e", false, "Encrypt the mnemonic with a password")
+	createCmd.PersistentFlags().BoolP("compressed", "c", true, "Compress the output keys")
+	createCmd.PersistentFlags().BoolP("save", "", true, "Save the wallet to a file or to 1Password")
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// generateCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// createCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	viper.SetEnvPrefix("op")
-	generateCmd.Flags().StringP("op-service-account-token", "t", "", "1Password service account token (optional)")
-	generateCmd.Flags().StringP("op-vault-id", "v", "", "1Password vault ID (optional)")
-	err := viper.BindPFlag("service_account_token", generateCmd.Flags().Lookup("op-service-account-token"))
+	createCmd.Flags().StringP("op-service-account-token", "t", "", "1Password service account token (optional)")
+	createCmd.Flags().StringP("op-vault-id", "v", "", "1Password vault ID (optional)")
+	err := viper.BindPFlag("service_account_token", createCmd.Flags().Lookup("op-service-account-token"))
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	err = viper.BindPFlag("vault_id", generateCmd.Flags().Lookup("op-vault-id"))
+	err = viper.BindPFlag("vault_id", createCmd.Flags().Lookup("op-vault-id"))
 	if err != nil {
 		fmt.Println(err)
 		return

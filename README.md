@@ -7,46 +7,45 @@ A BIP-0044 compatible key generator for multiple blockchains. This is not a secu
 ## Usage
 ### key-gen
 ```
-key-gen is a CLI tool to generate keys for various blockchains. It supports Bitcoin, Ethereum, and other blockchains. It supports saving keys to 1Password, and the file system in encrypted or unencrypted json. The keys are generated from a BIP32 seed and support BIP44, BIP49, and BIP84 derivation paths. This project has not and will not be audited by a security professional. Use at your own risk.
+key-gen is a CLI tool to generate keys for various blockchains. It supports Bitcoin, Ethereum, and other blockchains.It supports saving keys to 1Password, and the file system in encrypted or unencrypted json. The keys are generated from a BIP32 seed and support BIP44, BIP49, and BIP84 derivation paths. This project has not and will not be audited by a security professional. Use at your own risk.
 
 Usage:
   key-gen [command]
 
 Available Commands:
   completion  Generate the autocompletion script for the specified shell
+  create      Create unencrypted accounts with private keys to 1Password and/or the file system
   decrypt     Decrypt keys
   encrypt     Generate encrypted accounts with private keys to the file system
-  generate    Generate unencrypted accounts with private keys to 1Password and/or the file system
   help        Help about any command
 
 Flags:
-  -f, --file string       The path to save the keys or read the keys from
+  -f, --file string       The path to save the keys or read the keys from (optional, required for decrypt)
   -h, --help              help for key-gen
-  -p, --password string   Password for encryption (optional)
+  -p, --password string   Password for encryption (optional, required for encrypt/decrypt)
   -s, --suppress          Suppress the mnemonic and private keys from the output
   -t, --toggle            Help message for toggle
 
 Use "key-gen [command] --help" for more information about a command.
-
 ```
 
-### key-gen generate
+### key-gen create
 ```bash
-key-gen generate
+key-gen create
 ```
 ```
-Generate unencrypted accounts and keys for various blockchains. 
+Create unencrypted accounts and keys for various blockchains. 
 It supports Bitcoin, Ethereum, and other blockchains that support BIP-0032 and BIP-0044 keys. 
 It accepts or generates the base mnemonic and can encrypt the mnemonic with a password.
 
 Usage:
-  key-gen generate [flags]
+  key-gen create [flags]
 
 Flags:
   -a, --accounts int                      Number of accounts to generate (default 1)
   -c, --compressed                        Compress the output keys (default true)
   -e, --encrypt-mnemonic                  Encrypt the mnemonic with a password
-  -h, --help                              help for generate
+  -h, --help                              help for create
   -m, --mnemonic string                   Base mnemonic for the wallet (optional)
   -n, --name string                       Name of the wallet (default "Generated Wallet")
   -t, --op-service-account-token string   1Password service account token (optional)
@@ -54,8 +53,8 @@ Flags:
       --save                              Save the wallet to a file or to 1Password (default true)
 
 Global Flags:
-  -f, --file string       The path to save the keys or read the keys from
-  -p, --password string   Password for encryption (optional)
+  -f, --file string       The path to save the keys or read the keys from (optional, required for decrypt)
+  -p, --password string   Password for encryption (optional, required for encrypt/decrypt)
   -s, --suppress          Suppress the mnemonic and private keys from the output
 ``` 
 ### key-gen encrypt
