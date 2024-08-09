@@ -34,20 +34,22 @@ jobs:
           binary_name: "key-gen"
           extra_files: LICENSE README.md
 
+  release-homebrew:
+    name: Release Homebrew Formula
+    runs-on: ubuntu-latest
+    needs: releases-matrix
+    steps:
       - name: Extract version
         id: extract-version
-        # Strip a string prefix from the git tag name:
         run: |
           echo "tag-name=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-
       - uses: mislav/bump-homebrew-formula-action@v3
-        if: ${{ matrix.goos != 'windows' || !contains(github.ref, '-') }}
         with:
           formula-name: key-gen
           formula-path: Formula/k/key-gen.rb
           homebrew-tap: ulmentflam/homebrew-tap
           base-branch: main
-          download-url: https://github.com/ulmentflam/key-gen/releases/download/${{ steps.extract-version.outputs.tag-name }}/key-gen-${{ steps.extract-version.outputs.tag-name }}-${{ matrix.goos }}-${{ matrix.goarch }}.tar.gz
+          download-url: https://github.com/ulmentflam/key-gen/releases/download/${{ steps.extract-version.outputs.tag-name }}/key-gen-${{ steps.extract-version.outputs.tag-name }}-darwin-arm64.tar.gz
           commit-message: |
             {{formulaName}} {{version}}
 
