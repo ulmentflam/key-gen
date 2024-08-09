@@ -1,3 +1,5 @@
+name: Homebrew
+
 on:
   workflow_dispatch:
     inputs:
@@ -16,7 +18,6 @@ jobs:
           formula-path: Formula/k/key-gen.rb
           homebrew-tap: ulmentflam/homebrew-tap
           tag-name: ${{ github.event.inputs.tag-name }}
-          download-url: https://github.com/ulmentflam/key-gen/releases/download/${{ github.event.inputs.tag-name }}key-gen-${{ github.event.inputs.tag-name }}-darwin-arm64.tar.gz
-
+          download-url: https://github.com/ulmentflam/key-gen/releases/download/${{ github.event.inputs.tag-name }}/key-gen-${{ github.event.inputs.tag-name }}-darwin-arm64.tar.gz
         env:
           COMMITTER_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
