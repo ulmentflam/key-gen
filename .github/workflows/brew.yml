@@ -1,0 +1,22 @@
+on:
+  workflow_dispatch:
+    inputs:
+      tag-name:
+        description: 'The git tag name to bump the formula to'
+        required: true
+
+jobs:
+  homebrew:
+    name: Bump Homebrew formula
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mislav/bump-homebrew-formula-action@v3
+        with:
+          formula-name: key-gen
+          formula-path: Formula/k/key-gen.rb
+          homebrew-tap: ulmentflam/homebrew-tap
+          tag-name: ${{ github.event.inputs.tag-name }}
+          download-url: https://github.com/ulmentflam/key-gen/releases/download/${{ github.event.inputs.tag-name }}key-gen-${{ github.event.inputs.tag-name }}-darwin-arm64.tar.gz
+
+        env:
+          COMMITTER_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
