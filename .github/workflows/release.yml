@@ -46,7 +46,7 @@ jobs:
           formula-path: Formula/k/key-gen.rb
           homebrew-tap: ulmentflam/tap
           base-branch: main
-          download-url: https://example.com/packages/key-gen-${{ steps.extract-version.outputs.tag-name }}-darwin-arm64.tar.gz
+          download-url: https://github.com/ulmentflam/key-gen/releases/download/${{ steps.extract-version.outputs.tag-name }}/key-gen-${{ steps.extract-version.outputs.tag-name }}-darwin-arm64.tar.gz
           commit-message: |
             {{formulaName}} {{version}}
 
