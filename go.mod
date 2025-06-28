@@ -5,7 +5,7 @@ go 1.22.5
 require (
 	github.com/1password/onepassword-sdk-go v0.1.6
 	github.com/btcsuite/btcd v0.24.2
-	github.com/btcsuite/btcd/btcec/v2 v2.3.4
+	github.com/btcsuite/btcd/btcec/v2 v2.3.5
 	github.com/btcsuite/btcd/btcutil v1.1.6
 	github.com/ethereum/go-ethereum v1.14.13
 	github.com/spf13/cobra v1.8.1
