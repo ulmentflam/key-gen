@@ -43,7 +43,7 @@ jobs:
         id: extract-version
         run: |
           echo "tag-name=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-      - uses: mislav/bump-homebrew-formula-action@v3
+      - uses: mislav/bump-homebrew-formula-action@v3.6
         with:
           formula-name: key-gen
           formula-path: Formula/k/key-gen.rb
