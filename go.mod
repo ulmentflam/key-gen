@@ -9,7 +9,7 @@ require (
 	github.com/btcsuite/btcd/btcutil v1.1.6
 	github.com/ethereum/go-ethereum v1.14.13
 	github.com/spf13/cobra v1.9.1
-	github.com/spf13/pflag v1.0.6
+	github.com/spf13/pflag v1.0.10
 	github.com/spf13/viper v1.20.1
 	github.com/tyler-smith/go-bip32 v1.0.0
 	github.com/tyler-smith/go-bip39 v1.1.0
