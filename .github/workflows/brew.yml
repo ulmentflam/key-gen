@@ -12,7 +12,7 @@ jobs:
     name: Bump Homebrew formula
     runs-on: ubuntu-latest
     steps:
-      - uses: mislav/bump-homebrew-formula-action@v3.6
+      - uses: mislav/bump-homebrew-formula-action@v4.2
         with:
           formula-name: key-gen
           formula-path: Formula/k/key-gen.rb
